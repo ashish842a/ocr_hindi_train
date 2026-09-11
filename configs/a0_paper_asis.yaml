@@ -1,0 +1,55 @@
+# A0: Paper as literally written
+# ResNet50 with stock stride /32 - WILL FAIL on 66.7% of data
+# This config exists to document G1 empirically
+
+seed: 42
+
+data:
+  data_root: dataset/IIIT-HW-Hindi_v1
+  train_manifest: data_processed/train_manifest.jsonl
+  val_manifest: data_processed/val_manifest.jsonl
+  test_manifest: data_processed/test_manifest.jsonl
+  charset_path: data_processed/charset.json
+  target_height: 64
+  use_bucket_sampler: true
+  num_buckets: 10
+  num_workers: 4
+
+model:
+  backbone_type: resnet50
+  neck_type: bilstm
+  head_type: ctc
+
+  backbone_config:
+    pretrained: true
+    fix_stride: false      # ❌ NOT FIXED - this is the bug
+    frozen_stages: 0
+
+  neck_config:
+    hidden_dim: 512
+    num_layers: 2
+    dropout: 0.3
+
+  head_config:
+    dropout: 0.3
+
+  use_writer_adversary: false
+
+training:
+  num_epochs: 50
+  batch_size: 32
+  val_batch_size: 32
+
+  optimizer:
+    type: adam
+    lr: 0.0001
+    weight_decay: 0.0
+
+  use_amp: true
+  grad_clip: 5.0
+
+  checkpoint_dir: checkpoints/a0_paper_asis
+  log_dir: logs/a0_paper_asis
+
+augmentation:
+  enabled: false

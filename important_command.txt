@@ -1,0 +1,16 @@
+ Step 1: Regenerate data with full charset (100 chars)
+  python3 scripts/prepare_data_simple.py \
+      --data-root dataset \
+      --output-dir data_processed \
+      --min-char-freq 1 \
+      --normalize
+
+  Step 2: Train the corrected model
+  python scripts/train.py --config configs/a1_baseline.yaml
+
+  Step 3: Evaluate
+  python scripts/evaluate.py \
+      --config configs/a1_baseline.yaml \
+      --checkpoint checkpoints/a1_baseline/best.pt \
+      --split test \
+      --output results/a1_test.json

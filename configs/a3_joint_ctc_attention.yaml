@@ -1,0 +1,94 @@
+# A3: Joint CTC-Attention Architecture
+# Target: 4-5% CER (from current 6.24%)
+# Key improvement: Attention mechanism for better sequence modeling
+# Expected WER: ~18-20% (from current 24.85%)
+
+seed: 42
+
+data:
+  data_root: .
+  train_manifest: data_processed/train_manifest.jsonl
+  val_manifest: data_processed/val_manifest.jsonl
+  test_manifest: data_processed/test_manifest.jsonl
+  charset_path: data_processed/charset.json
+  target_height: 64
+  use_bucket_sampler: true
+  num_buckets: 10
+  num_workers: 0  # Disabled due to disk space constraints
+
+model:
+  backbone_type: resnet50
+  neck_type: bilstm
+  head_type: joint  # ← CHANGED: Joint CTC + Attention
+
+  backbone_config:
+    pretrained: true
+    fix_stride: true
+    frozen_stages: 0
+
+  neck_config:
+    hidden_dim: 512
+    num_layers: 2  # Consider 3 layers for better performance
+    dropout: 0.3
+
+  head_config:
+    # CTC head configuration
+    ctc_config:
+      dropout: 0.3
+
+    # Attention head configuration
+    attention_config:
+      decoder_dim: 512
+      attention_dim: 256
+      dropout: 0.3
+
+  use_writer_adversary: false
+
+training:
+  num_epochs: 100
+  batch_size: 32  # May need to reduce to 24-28 if OOM
+  val_batch_size: 32
+
+  optimizer:
+    type: adam
+    lr: 0.0002
+    weight_decay: 0.00005
+
+  scheduler:
+    type: cosine
+    T_max: 100
+    min_lr: 0.000001
+    verbose: true
+
+  # Joint training weight
+  ctc_weight: 0.7  # 70% CTC, 30% Attention
+
+  use_amp: true
+  grad_clip: 5.0
+
+  checkpoint_dir: checkpoints/a3_joint_ctc_attention
+  log_dir: logs/a3_joint_ctc_attention
+  experiment_name: a3_joint_ctc_attention
+  save_checkpoint_every: 5
+
+augmentation:
+  enabled: true
+  # Same strong augmentation as A2
+  elastic: true
+  elastic_alpha: 30
+  elastic_sigma: 4
+  elastic_p: 0.6
+  affine: true
+  affine_rotation: 8
+  affine_scale: [0.85, 1.15]
+  affine_shear: 8
+  affine_p: 0.5
+  perspective: true
+  perspective_distortion: 0.15
+  perspective_p: 0.4
+  morphology: true
+  morphology_kernel: 2
+  morphology_p: 0.3
+  noise: true
+  noise_sigma: 8
+  noise_p: 0.4

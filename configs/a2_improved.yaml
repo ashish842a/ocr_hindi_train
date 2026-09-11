@@ -1,0 +1,90 @@
+# A2: Improved baseline with stronger augmentation
+# Target: 4-5% CER improvement from A1 (6.98% CER)
+# Changes:
+# - Extended training to 100 epochs
+# - Stronger augmentation
+# - Lower initial LR with cosine schedule
+# - Increased weight decay
+
+seed: 42
+
+data:
+  data_root: .
+  train_manifest: data_processed/train_manifest.jsonl
+  val_manifest: data_processed/val_manifest.jsonl
+  test_manifest: data_processed/test_manifest.jsonl
+  charset_path: data_processed/charset.json
+  target_height: 64
+  use_bucket_sampler: true
+  num_buckets: 10
+  num_workers: 0  # Disabled due to disk space constraints
+
+model:
+  backbone_type: resnet50
+  neck_type: bilstm
+  head_type: ctc
+
+  backbone_config:
+    pretrained: true
+    fix_stride: true
+    frozen_stages: 0  # Keep all layers trainable
+
+  neck_config:
+    hidden_dim: 512
+    num_layers: 2
+    dropout: 0.3
+
+  head_config:
+    dropout: 0.3
+
+  use_writer_adversary: false
+
+training:
+  num_epochs: 100  # Extended from 50
+  batch_size: 32
+  val_batch_size: 32
+
+  optimizer:
+    type: adam
+    lr: 0.0002  # Slightly lower initial LR
+    weight_decay: 0.00005  # Increased regularization
+
+  scheduler:
+    type: cosine  # Changed to cosine annealing
+    T_max: 100
+    min_lr: 0.000001
+    verbose: true
+
+  use_amp: true
+  grad_clip: 5.0
+
+  checkpoint_dir: checkpoints/a2_improved
+  log_dir: logs/a2_improved
+  experiment_name: a2_improved
+  save_checkpoint_every: 5
+
+augmentation:
+  enabled: true
+  # Elastic distortion
+  elastic: true
+  elastic_alpha: 30
+  elastic_sigma: 4
+  elastic_p: 0.6
+  # Affine transforms
+  affine: true
+  affine_rotation: 8
+  affine_scale: [0.85, 1.15]
+  affine_shear: 8
+  affine_p: 0.5
+  # Perspective
+  perspective: true
+  perspective_distortion: 0.15
+  perspective_p: 0.4
+  # Morphology
+  morphology: true
+  morphology_kernel: 2
+  morphology_p: 0.3
+  # Noise
+  noise: true
+  noise_sigma: 8
+  noise_p: 0.4

@@ -1,0 +1,54 @@
+# P1: Small CRNN sanity check
+# Quick baseline to verify pipeline before GPU runs
+# Smaller model, can run on CPU for smoke test
+
+seed: 42
+
+data:
+  data_root: dataset/IIIT-HW-Hindi_v1
+  train_manifest: data_processed/train_manifest.jsonl
+  val_manifest: data_processed/val_manifest.jsonl
+  test_manifest: data_processed/test_manifest.jsonl
+  charset_path: data_processed/charset.json
+  target_height: 32       # Smaller for speed
+  use_bucket_sampler: true
+  num_buckets: 5
+  num_workers: 2
+
+model:
+  backbone_type: crnn     # VGG-style CNN
+  neck_type: bilstm
+  head_type: ctc
+
+  backbone_config:
+    input_channels: 1
+    hidden_dim: 256
+
+  neck_config:
+    hidden_dim: 256       # Smaller
+    num_layers: 2
+    dropout: 0.3
+
+  head_config:
+    dropout: 0.3
+
+  use_writer_adversary: false
+
+training:
+  num_epochs: 5           # Just a few epochs for sanity
+  batch_size: 16          # Smaller batch
+  val_batch_size: 16
+
+  optimizer:
+    type: adam
+    lr: 0.001             # Slightly higher LR for faster convergence
+    weight_decay: 0.0
+
+  use_amp: false          # Disable AMP for CPU compatibility
+  grad_clip: 5.0
+
+  checkpoint_dir: checkpoints/p1_crnn_sanity
+  log_dir: logs/p1_crnn_sanity
+
+augmentation:
+  enabled: false

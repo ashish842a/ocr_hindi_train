@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Version Changelog - Hindi HTR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+        }
+
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-failed {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .status-current {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-planned {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .status-complete {
+            background: #27ae60;
+            color: white;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .copy-btn:hover {
+            background: #2980b9;
+        }
+
+        .config-box {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .changed {
+            background: #ffe6e6;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .unchanged {
+            background: #e6ffe6;
+            border-left: 4px solid #27ae60;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .version-section {
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .metadata {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metadata-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .metadata-label {
+            font-weight: 600;
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            padding: 8px 0;
+        }
+
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .architecture-diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .copy-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Model Version Changelog</h1>
+        <p class="subtitle">Hindi Handwritten Text Recognition (HTR) System</p>
+
+        <div class="info-box">
+            <strong>📝 Purpose:</strong> This document tracks all model versions, architectural changes, and experimental configurations for reproducibility and ablation studies.
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h3>📑 Table of Contents</h3>
+            <ul>
+                <li><a href="#summary">Quick Version Summary</a></li>
+                <li><a href="#v1">Version 1: Baseline (Charset Issue) ❌</a></li>
+                <li><a href="#v2">Version 2: Baseline (Corrected) 🔄</a></li>
+                <li><a href="#v3">Version 3: With Data Augmentation 📝</a></li>
+                <li><a href="#v4">Version 4: Joint CTC-Attention 📝</a></li>
+                <li><a href="#comparison">Results Comparison</a></li>
+                <li><a href="#operations">Common Operations</a></li>
+            </ul>
+        </div>
+
+        <!-- Quick Summary -->
+        <h2 id="summary">📋 Quick Version Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Version</th>
+                    <th>Date</th>
+                    <th>Charset</th>
+                    <th>Architecture</th>
+                    <th>CER (%)</th>
+                    <th>WER (%)</th>
+                    <th>Status</th>
+                    <th>Archive</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>v1</strong></td>
+                    <td>2026-09-10</td>
+                    <td>72 chars</td>
+                    <td>ResNet50+BiLSTM+CTC</td>
+                    <td>46.08</td>
+                    <td>78.02</td>
+                    <td><span class="status-badge status-failed">Failed</span></td>
+                    <td><code>experiments/archive/v1_charset72_*</code></td>
+                </tr>
+                <tr>
+                    <td><strong>v2</strong></td>
+                    <td>2026-09-10</td>
+                    <td>100 chars</td>
+                    <td>ResNet50+BiLSTM+CTC</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td><span class="status-badge status-current">Current</span></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>v3</strong></td>
+                    <td>TBD</td>
+                    <td>100 chars</td>
+                    <td>ResNet50+BiLSTM+CTC+Aug</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td><span class="status-badge status-planned">Planned</span></td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>v4</strong></td>
+                    <td>TBD</td>
+                    <td>100 chars</td>
+                    <td>ResNet50+BiLSTM+Joint</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td><span class="status-badge status-planned">Planned</span></td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Version 1 -->
+        <div class="version-section" id="v1">
+            <h2>Version 1: Baseline (Charset Issue) ❌</h2>
+
+            <div class="metadata">
+                <div class="metadata-item">
+                    <span class="metadata-label">Version</span>
+                    v1_charset72
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Date</span>
+                    2026-09-10
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Status</span>
+                    <span class="status-badge status-failed">Failed</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Archive</span>
+                    <code>experiments/archive/v1_charset72_*</code>
+                </div>
+            </div>
+
+            <h3>🏗️ Model Architecture</h3>
+            <div class="architecture-diagram">
+Input: RGB Images (H=64, W=variable)
+    ↓
+ResNet50 Backbone (pretrained)
+  - conv1 + maxpool: stride /4
+  - layer1: stride /1
+  - layer2: stride /2
+  - layer3: stride /2 (modified to (2,1) - HEIGHT only)
+  - layer4: stride /2 (modified to (2,1) - HEIGHT only)
+  - Total stride: /8 width, /16 height
+  - Output: [B, 2048, H/16, W/8]
+    ↓
+Height Pooling: mean(dim=2)
+  - Output: [B, 2048, W/8]
+    ↓
+BiLSTM Neck (2 layers, 512 hidden)
+  - Bidirectional LSTM
+  - Output: [B, W/8, 1024]
+    ↓
+CTC Head (dropout=0.3)
+  - Linear: 1024 → <span class="highlight">74 classes (72 chars + blank + unk)</span>
+  - Output: [B, W/8, 74]
+    ↓
+CTC Loss
+            </div>
+
+            <h3>📊 Results</h3>
+            <div class="config-box">
+                <strong>Training (50 epochs, 2.1 hours):</strong>
+                <ul>
+                    <li>Train Loss: 0.0058 (epoch 50)</li>
+                    <li>Val Loss: 0.158 (best at epoch 45)</li>
+                    <li>Total Parameters: 40,406,182</li>
+                    <li>Training Time: 2.1 hours</li>
+                </ul>
+            </div>
+
+            <div class="config-box changed">
+                <strong>Test Evaluation (FAILED):</strong>
+                <ul>
+                    <li><strong>CER:</strong> 46.08% [45.63%, 46.56%] (95% CI)</li>
+                    <li><strong>WER:</strong> 78.02% [77.34%, 78.76%] (95% CI)</li>
+                    <li>Samples: 12,869</li>
+                </ul>
+            </div>
+
+            <h3>🔍 Issue Analysis</h3>
+            <div class="warning-box">
+                <strong>⚠️ Problem:</strong> Used <code>min_char_freq=50</code> which excluded 28 rare but important characters.
+                <br><br>
+                <strong>Evidence:</strong>
+                <ul>
+                    <li>Expected charset: 100 characters</li>
+                    <li>Actual charset: 72 characters</li>
+                    <li><strong>Missing: 28 characters (28% of vocabulary)</strong></li>
+                </ul>
+                <br>
+                <strong>Example Errors:</strong><br>
+                <code>REF: प्रतिभावान  →  HYP: फतिाशा  (missing conjuncts)</code><br>
+                <code>REF: सुसरालजनों  →  HYP: खुखरा    (missing characters)</code>
+            </div>
+
+            <h3>🔄 How to Reproduce</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre># 1. Prepare data (incorrect - for reproduction only)
+python3 scripts/prepare_data_simple.py \
+    --data-root dataset \
+    --output-dir data_processed \
+    --min-char-freq 50 \
+    --normalize
+
+# 2. Train
+./scripts/train_with_log.sh configs/a1_baseline.yaml
+
+# 3. Evaluate
+./scripts/evaluate_with_log.sh \
+    --config configs/a1_baseline.yaml \
+    --checkpoint checkpoints/a1_baseline/best.pt \
+    --split test \
+    --output results/a1_test.json
+
+# 4. Archive
+./experiments/archive_experiment.sh v1_charset72 "Baseline with 72 chars (failed)"</pre>
+            </div>
+        </div>
+
+        <!-- Version 2 -->
+        <div class="version-section" id="v2">
+            <h2>Version 2: Baseline (Corrected) 🔄</h2>
+
+            <div class="metadata">
+                <div class="metadata-item">
+                    <span class="metadata-label">Version</span>
+                    v2_charset100
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Date</span>
+                    2026-09-10
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Status</span>
+                    <span class="status-badge status-current">In Progress</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Archive</span>
+                    TBD
+                </div>
+            </div>
+
+            <h3>⚙️ Configuration Changes from v1</h3>
+
+            <div class="config-box changed">
+                <strong>🔴 CHANGED:</strong>
+                <ul>
+                    <li>charset_size: <del>74 (72 chars + 2)</del> → <strong>102 (100 chars + 2)</strong></li>
+                    <li>min_char_freq: <del>50</del> → <strong>1</strong></li>
+                </ul>
+            </div>
+
+            <div class="config-box unchanged">
+                <strong>🟢 UNCHANGED:</strong>
+                <ul>
+                    <li>Model Architecture: Same as v1</li>
+                    <li>Training Hyperparameters: Same as v1</li>
+                    <li>Batch Size, Learning Rate, etc.: Same as v1</li>
+                </ul>
+            </div>
+
+            <h3>📊 Expected Results</h3>
+            <div class="success-box">
+                <strong>Based on paper baseline:</strong>
+                <ul>
+                    <li><strong>Expected CER:</strong> 12-14%</li>
+                    <li><strong>Expected WER:</strong> 25-28%</li>
+                    <li>Training Time: ~2-3 hours (50 epochs)</li>
+                </ul>
+            </div>
+
+            <h3>🔄 How to Run</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre># 1. Clean previous experiment
+rm -rf checkpoints/a1_baseline/ logs/a1_baseline/ results/
+
+# 2. Prepare data (CORRECTED)
+python3 scripts/prepare_data_simple.py \
+    --data-root dataset \
+    --output-dir data_processed \
+    --min-char-freq 1 \
+    --normalize
+
+# Verify charset size
+wc -l data_processed/charset.txt  # Should show: 100
+
+# 3. Train
+./scripts/train_with_log.sh configs/a1_baseline.yaml
+
+# 4. Evaluate
+./scripts/evaluate_with_log.sh \
+    --config configs/a1_baseline.yaml \
+    --checkpoint checkpoints/a1_baseline/best.pt \
+    --split test \
+    --output results/a1_test.json
+
+# 5. Archive
+./experiments/archive_experiment.sh v2_charset100 "Baseline with 100 chars (corrected)"</pre>
+            </div>
+        </div>
+
+        <!-- Version 3 -->
+        <div class="version-section" id="v3">
+            <h2>Version 3: With Data Augmentation 📝</h2>
+
+            <div class="metadata">
+                <div class="metadata-item">
+                    <span class="metadata-label">Version</span>
+                    v3_augmentation
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Status</span>
+                    <span class="status-badge status-planned">Planned</span>
+                </div>
+            </div>
+
+            <h3>⚙️ Configuration Changes from v2</h3>
+
+            <div class="config-box changed">
+                <strong>🔴 CHANGED:</strong>
+                <ul>
+                    <li>augmentation: <del>false</del> → <strong>true</strong></li>
+                    <li>random_rotation: 2.0 degrees</li>
+                    <li>random_affine: scale [0.9, 1.1], shear 2.0</li>
+                    <li>elastic_transform: alpha 10.0, sigma 3.0</li>
+                </ul>
+            </div>
+
+            <h3>🔄 How to Run</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>./scripts/train_with_log.sh configs/a2_augmentation.yaml
+
+./scripts/evaluate_with_log.sh \
+    --config configs/a2_augmentation.yaml \
+    --checkpoint checkpoints/a2_augmentation/best.pt \
+    --split test \
+    --output results/a2_test.json
+
+./experiments/archive_experiment.sh v3_augmentation "With data augmentation"</pre>
+            </div>
+        </div>
+
+        <!-- Version 4 -->
+        <div class="version-section" id="v4">
+            <h2>Version 4: Joint CTC-Attention 📝</h2>
+
+            <div class="metadata">
+                <div class="metadata-item">
+                    <span class="metadata-label">Version</span>
+                    v4_joint_attention
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Status</span>
+                    <span class="status-badge status-planned">Planned</span>
+                </div>
+            </div>
+
+            <h3>⚙️ Configuration Changes from v2</h3>
+
+            <div class="config-box changed">
+                <strong>🔴 CHANGED:</strong>
+                <ul>
+                    <li>head_type: <del>ctc</del> → <strong>joint</strong></li>
+                    <li>CTC Weight: 0.7</li>
+                    <li>Attention Weight: 0.3</li>
+                    <li>attention_dim: 512</li>
+                    <li>num_decoder_layers: 2</li>
+                </ul>
+            </div>
+
+            <h3>🔄 How to Run</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <pre>./scripts/train_with_log.sh configs/a5_joint_ctc_attention.yaml
+
+./scripts/evaluate_with_log.sh \
+    --config configs/a5_joint_ctc_attention.yaml \
+    --checkpoint checkpoints/a5_joint_ctc_attention/best.pt \
+    --split test \
+    --output results/a5_test.json
+
+./experiments/archive_experiment.sh v4_joint_attention "Joint CTC-Attention"</pre>
+            </div>
+        </div>
+
+        <!-- Results Comparison -->
+        <h2 id="comparison">📊 Results Comparison</h2>
+
+        <h3>Performance Metrics</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Version</th>
+                    <th>Charset</th>
+                    <th>Aug</th>
+                    <th>Architecture</th>
+                    <th>CER (%)</th>
+                    <th>WER (%)</th>
+                    <th>Δ CER</th>
+                    <th>Δ WER</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>v1</td>
+                    <td>72</td>
+                    <td>No</td>
+                    <td>ResNet+BiLSTM+CTC</td>
+                    <td>46.08</td>
+                    <td>78.02</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>v2</td>
+                    <td>100</td>
+                    <td>No</td>
+                    <td>ResNet+BiLSTM+CTC</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                </tr>
+                <tr>
+                    <td>v3</td>
+                    <td>100</td>
+                    <td>Yes</td>
+                    <td>ResNet+BiLSTM+CTC</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                </tr>
+                <tr>
+                    <td>v4</td>
+                    <td>100</td>
+                    <td>Yes</td>
+                    <td>ResNet+BiLSTM+Joint</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Common Operations -->
+        <h2 id="operations">🔧 Common Operations</h2>
+
+        <h3>View Version Differences</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre># Compare configs
+diff experiments/archive/v1_*/config.yaml experiments/archive/v2_*/config.yaml
+
+# Compare charsets
+diff experiments/archive/v1_*/data_processed/charset.txt \
+     experiments/archive/v2_*/data_processed/charset.txt</pre>
+        </div>
+
+        <h3>Analyze Version Performance</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <pre># View training curves
+python scripts/view_training_logs.py --log-dir experiments/archive/v2_*/logs
+
+# Compare predictions
+head -50 experiments/archive/v1_*/results/a1_test.predictions.txt
+head -50 experiments/archive/v2_*/results/a1_test.predictions.txt</pre>
+        </div>
+
+        <div class="info-box" style="margin-top: 40px;">
+            <strong>📝 Last Updated:</strong> 2026-09-10<br>
+            <strong>🔄 Next Update:</strong> After v2 training completes
+        </div>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

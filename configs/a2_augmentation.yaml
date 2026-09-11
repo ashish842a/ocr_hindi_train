@@ -1,0 +1,73 @@
+# A2: A1 + augmentation
+# Elastic, affine, perspective, morphological transforms
+
+seed: 42
+
+data:
+  data_root: dataset/IIIT-HW-Hindi_v1
+  train_manifest: data_processed/train_manifest.jsonl
+  val_manifest: data_processed/val_manifest.jsonl
+  test_manifest: data_processed/test_manifest.jsonl
+  charset_path: data_processed/charset.json
+  target_height: 64
+  use_bucket_sampler: true
+  num_buckets: 10
+  num_workers: 4
+
+model:
+  backbone_type: resnet50
+  neck_type: bilstm
+  head_type: ctc
+
+  backbone_config:
+    pretrained: true
+    fix_stride: true
+    frozen_stages: 0
+
+  neck_config:
+    hidden_dim: 512
+    num_layers: 2
+    dropout: 0.3
+
+  head_config:
+    dropout: 0.3
+
+  use_writer_adversary: false
+
+training:
+  num_epochs: 50
+  batch_size: 32
+  val_batch_size: 32
+
+  optimizer:
+    type: adam
+    lr: 0.0001
+    weight_decay: 0.0
+
+  use_amp: true
+  grad_clip: 5.0
+
+  checkpoint_dir: checkpoints/a2_augmentation
+  log_dir: logs/a2_augmentation
+
+augmentation:
+  enabled: true
+
+  elastic: true
+  elastic_alpha: 20.0
+  elastic_sigma: 3.0
+  elastic_p: 0.5
+
+  affine: true
+  affine_rotation: 5.0
+  affine_scale: [0.9, 1.1]
+  affine_shear: 5.0
+  affine_p: 0.5
+
+  perspective: true
+  perspective_distortion: 0.2
+  perspective_p: 0.5
+
+  morphology: true
+  morphology_kernel: 2
+  morphology_p: 0.3

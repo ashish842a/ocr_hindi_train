@@ -1,0 +1,72 @@
+# A1: Corrected baseline
+# ResNet50 with (2,1) stride fix + BiLSTM + CTC
+# This is the WORKING baseline
+
+seed: 42
+
+data:
+  data_root: .
+  train_manifest: data_processed/train_manifest.jsonl
+  val_manifest: data_processed/val_manifest.jsonl
+  test_manifest: data_processed/test_manifest.jsonl
+  charset_path: data_processed/charset.json
+  target_height: 64
+  use_bucket_sampler: true
+  num_buckets: 10
+  num_workers: 4
+
+model:
+  backbone_type: resnet50
+  neck_type: bilstm
+  head_type: ctc
+
+  backbone_config:
+    pretrained: true
+    fix_stride: true       # ✓ FIXED - stride (2,1) in layer3+layer4
+    frozen_stages: 0       # Try 1 or 2 if still overfitting
+
+  neck_config:
+    hidden_dim: 512
+    num_layers: 2
+    dropout: 0.3
+
+  head_config:
+    dropout: 0.3
+
+  use_writer_adversary: false
+
+training:
+  num_epochs: 50
+  batch_size: 32
+  val_batch_size: 32
+
+  optimizer:
+    type: adam
+    lr: 0.0003
+    weight_decay: 0.00001
+
+  scheduler:
+    type: reduce_on_plateau
+    mode: min
+    factor: 0.5
+    patience: 5
+    min_lr: 0.00001
+    verbose: true
+
+  use_amp: true
+  grad_clip: 5.0
+
+  checkpoint_dir: checkpoints/a1_baseline
+  log_dir: logs/a1_baseline
+  experiment_name: a1_baseline
+  save_checkpoint_every: 5  # Save epoch checkpoint every 5 epochs
+
+augmentation:
+  enabled: true
+  brightness: 0.2
+  contrast: 0.2
+  rotation: 5
+  elastic_alpha: 20
+  elastic_sigma: 3
+  grid_distortion: 0.1
+  optical_distortion: 0.1

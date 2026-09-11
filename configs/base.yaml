@@ -1,0 +1,80 @@
+# Base configuration for Hindi HTR
+# All experiment configs inherit from this
+
+seed: 42
+
+data:
+  data_root: dataset/IIIT-HW-Hindi_v1
+  train_manifest: data_processed/train_manifest.jsonl
+  val_manifest: data_processed/val_manifest.jsonl
+  test_manifest: data_processed/test_manifest.jsonl
+  charset_path: data_processed/charset.json
+  target_height: 64
+  use_bucket_sampler: true
+  num_buckets: 10
+  num_workers: 4
+
+model:
+  backbone_type: resnet50  # resnet50, crnn
+  neck_type: bilstm        # bilstm, transformer, none
+  head_type: ctc           # ctc, attention, joint
+  num_classes: null        # Set from charset
+
+  backbone_config:
+    pretrained: true
+    fix_stride: true       # Critical for A1
+    frozen_stages: 0
+
+  neck_config:
+    hidden_dim: 512
+    num_layers: 2
+    dropout: 0.3
+
+  head_config:
+    dropout: 0.3
+
+  use_writer_adversary: false
+  num_writers: null        # Set from data if adversary enabled
+
+training:
+  num_epochs: 50
+  batch_size: 32
+  val_batch_size: 32
+
+  optimizer:
+    type: adam
+    lr: 0.0001
+    weight_decay: 0.0
+
+  use_amp: true
+  grad_clip: 5.0
+
+  # Checkpointing
+  checkpoint_dir: checkpoints
+  log_dir: logs
+  save_checkpoint_every: 5  # Save epoch checkpoint every N epochs
+
+augmentation:
+  enabled: false
+  elastic: false
+  elastic_alpha: 20.0
+  elastic_sigma: 3.0
+  elastic_p: 0.5
+
+  affine: false
+  affine_rotation: 5.0
+  affine_scale: [0.9, 1.1]
+  affine_shear: 5.0
+  affine_p: 0.5
+
+  perspective: false
+  perspective_distortion: 0.2
+  perspective_p: 0.5
+
+  morphology: false
+  morphology_kernel: 2
+  morphology_p: 0.3
+
+  noise: false
+  noise_sigma: 5.0
+  noise_p: 0.3

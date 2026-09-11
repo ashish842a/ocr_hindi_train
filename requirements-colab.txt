@@ -1,0 +1,9 @@
+# Hindi HTR - Requirements for Google Colab
+# Colab comes with torch, numpy, PIL pre-installed
+
+# Additional packages not in Colab by default
+editdistance>=0.6.0
+opencv-python>=4.8.0
+lmdb>=1.4.0
+
+# Colab already has: torch, torchvision, numpy, Pillow, PyYAML, tqdm, scipy
