@@ -14,3 +14,44 @@
       --checkpoint checkpoints/a1_baseline/best.pt \
       --split test \
       --output results/a1_test.json
+
+
+
+
+1. Let A2 Finish Training (Highest Priority)
+  # Check if A2 is still running
+  tail -f logs/a2_improved/train.log
+
+  # If it stopped due to disk space, resume:
+  python scripts/train.py --config configs/a2_improved.yaml --resume auto
+
+  2. Start A3 Joint CTC-Attention (Run in Parallel)
+  Expected: ~3.5-4.0% CER with greedy
+  python scripts/train.py --config configs/a3_joint_ctc_attention.yaml --no-resume
+
+  3. Build Character Language Model (Quick Win)
+  Expected: -0.8 to -1.2% CER improvement with beam search
+  python scripts/train_char_lm.py \
+    --n 5 \
+    --train-manifest data_processed/train_manifest.jsonl \
+    --output models/char_5gram_lm.pkl \
+    --test
+
+  Note on Beam Search: The A1 beam search result (118% CER) shows that beam search without a language model can actually
+  make things worse! This is why we need the character LM to guide the beam search properly.
+
+  Actual Performance Results:
+
+  | Model          | Technique | CER       | WER     | Status           |
+  |----------------|-----------|-----------|---------|------------------|
+  | A1 Baseline    | Greedy    | 6.98%     | 26.68%  | ✅ Completed      |
+  | A2 Improved    | Greedy    | 2.70%     | 12.53%  | ✅ Completed      |
+
+  🎯 A2 achieved 61.3% relative CER reduction from baseline!
+
+  Evaluation commands:
+  # Baseline
+  python scripts/evaluate.py --config configs/a1_baseline.yaml --checkpoint checkpoints/a1_baseline/best.pt --split test --output results/a1_test.json
+
+  # Improved
+  python scripts/evaluate.py --config configs/a2_improved.yaml --checkpoint checkpoints/a2_improved/best.pt --split test --output results/a2_test.json
